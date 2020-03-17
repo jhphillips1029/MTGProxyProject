@@ -480,7 +480,7 @@ class Deck {
         return $index >= $endex;
     }
     public static function dispCards($zone,$decklist,$cards,$files,$imgDir) {
-        if( count($cards)==0 ) {
+        if( empty($cards) ) {
             return;
         }
 

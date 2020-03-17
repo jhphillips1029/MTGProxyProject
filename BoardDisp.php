@@ -68,37 +68,39 @@ $sleeveArt = trim(file('sleeveBackground.txt')[0]);
                 $Deck::printToFile('boardState/deckOpen.txt',array());
             }
 
-            $options = array('creature','other','graveyard','exile','hand','command');
-            $field = $_POST['field'];
-            $fieldCards = [];
-            switch($field) {
-                case 'creature':
-                    $fieldCards = $Deck::read_field("creature");
-                    break;
-                case 'land':
-                    $fieldCards = $Deck::read_field("land");
-                    break;
-                case 'other':
-                    $fieldCards = $Deck::read_field("other");
-                    break;
-                case 'stack':
-                    $fieldCards = $Deck::read_field("stack");
-                    break;
-                case 'command':
-                    $fieldCards = $Deck::read_field("command");
-                    break;
-            }
-            for($i=0;$i<count($options);$i++) {
-                if( isset($_POST[$options[$i]]) ) {
-                    $postIndex = $_POST[$options[$i]];
-                    $absIndex = 0;
-                    for($j=0;$j<count($fieldCards);$j++) {
-                        if( $fieldCards[$j] == $postIndex ) {
-                            $absIndex = $fieldCards[$j];
+            if( isset($_POST['field']) ) {
+                $options = array('creature','other','graveyard','exile','hand','command');
+                $field = $_POST['field'];
+                $fieldCards = [];
+                switch($field) {
+                    case 'creature':
+                        $fieldCards = $Deck::read_field("creature");
+                        break;
+                    case 'land':
+                        $fieldCards = $Deck::read_field("land");
+                        break;
+                    case 'other':
+                        $fieldCards = $Deck::read_field("other");
+                        break;
+                    case 'stack':
+                        $fieldCards = $Deck::read_field("stack");
+                        break;
+                    case 'command':
+                        $fieldCards = $Deck::read_field("command");
+                        break;
+                }
+                for($i=0;$i<count($options);$i++) {
+                    if( isset($_POST[$options[$i]]) ) {
+                        $postIndex = $_POST[$options[$i]];
+                        $absIndex = 0;
+                        for($j=0;$j<count($fieldCards);$j++) {
+                            if( $fieldCards[$j] == $postIndex ) {
+                                $absIndex = $fieldCards[$j];
+                            }
                         }
-                    }
 
-                    $Deck::move($absIndex,$options[$i],$field);
+                        $Deck::move($absIndex,$options[$i],$field);
+                    }
                 }
             }
 
@@ -237,14 +239,20 @@ $sleeveArt = trim(file('sleeveBackground.txt')[0]);
                     <div class="commandZone">
                         <p>Command Zone</p>
 		                    <?php
-                                $Deck::dispCards("command",$decklist,array($Deck::read_field("command")[count($Deck::read_field("command"))-1]),$files,$imgDir);
-		                    ?>
+                                if( empty($Deck::read_field("command")) ) {
+                                } else {
+                                    $Deck::dispCards("command",$decklist,array($Deck::read_field("command")[count($Deck::read_field("command"))-1]),$files,$imgDir);
+		                    }
+                            ?>
                     </div>
                     <div class="stack">
                         <p>Stack</p>
                         <div class='row'>
 		                    <?php
+                                if( empty($Deck::read_field("stack")) ) {
+                                } else {
                                 $Deck::dispCards("stack",$decklist,array($Deck::read_field("stack")[count($Deck::read_field("stack"))-1]),$files,$imgDir);
+		                    }
 		                    ?>
                         </div>
                     </div>
@@ -254,7 +262,10 @@ $sleeveArt = trim(file('sleeveBackground.txt')[0]);
                         <p>Exile</p>
                         <div class='row'>
 		                    <?php
+                                if( empty($Deck::read_field("exile")) ) {
+                                } else {
                                 $Deck::dispCards("exile",$decklist,array($Deck::read_field("exile")[count($Deck::read_field("exile"))-1]),$files,$imgDir);
+		                    }
 		                    ?>
                         </div>
                     </div>
@@ -262,7 +273,10 @@ $sleeveArt = trim(file('sleeveBackground.txt')[0]);
                         <p>Graveyard</p>
                         <div class='row'>
 		                    <?php
+                                if( empty($Deck::read_field("graveyard")) ) {
+                                } else {
                                 $Deck::dispCards("graveyard",$decklist,array($Deck::read_field("graveyard")[count($Deck::read_field("graveyard"))-1]),$files,$imgDir);
+		                    }
 		                    ?>
                         </div>
                     </div>
